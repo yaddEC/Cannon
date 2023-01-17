@@ -82,7 +82,7 @@ void CannonRenderer::DrawCannon(const CannonState& cannon)
 
     for (int i = 0; i < 4; i++)
     {
-        cannonEdge[i] = rotateVec(cannonEdge[i], cannonOrigin,90-cannon.angle);
+        cannonEdge[i] = rotateVec(cannonEdge[i], cannonOrigin,90 - cannon.angle);
     }
     
     dl->AddCircle(pos, 10.f, IM_COL32_WHITE);
@@ -104,6 +104,8 @@ void CannonRenderer::DrawProjectileMotion(const CannonState& cannon)
 CannonGame::CannonGame(CannonRenderer& renderer)
     : renderer(renderer)
 {
+    time.Init();
+
     cannonState.position.x = -22.f;
     cannonState.height = 50;
     cannonState.width = 25;
@@ -119,7 +121,7 @@ CannonGame::~CannonGame()
 void CannonGame::UpdateAndDraw()
 {
     renderer.PreUpdate();
-
+    time.Update();
 
 
     if (ImGui::Begin("Canon state", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
@@ -147,14 +149,15 @@ void CannonGame::UpdateAndDraw()
         {
             ImGui::SliderFloat("radius", &sphereDisplay.radius, 0.1, 50.f);
             ImGui::SliderFloat("mass", &sphereDisplay.mass, 0.1, 15.f);
+            ImGui::SliderFloat("initial speed", &sphereDisplay.initialSpeed, 0.1, 100.f);
             if (ImGui::Button("SHOOT!!!!!", ImVec2(100,50)))
             {
-                sphereDisplay.angle = cannonState.angle;
-                sphereDisplay.pos = cannonState.position;
                 projectiles.push_back(new Sphere(sphereDisplay.radius));
                 projectiles.back()->mass = sphereDisplay.mass;
+                projectiles.back()->initialSpeed = sphereDisplay.initialSpeed;
                 projectiles.back()->angle = cannonState.angle;
-                projectiles.back()->pos = renderer.ToPixels(cannonState.position);
+                projectiles.back()->initialPos = cannonState.position;
+                projectiles.back()->pos = cannonState.position;
             }
         }
 
@@ -168,6 +171,6 @@ void CannonGame::UpdateAndDraw()
     renderer.DrawProjectileMotion(cannonState);
     for (int i = 0; i < projectiles.size(); i++)
     {
-        projectiles[i]->Update(renderer.dl);
+        projectiles[i]->Update(renderer);
     }
 }

@@ -40,7 +40,12 @@
     <ClCompile Include="src\Maths.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Projectile.cpp" />
+    <ClCompile Include="src\Projectile.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Time.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\app.hpp">
@@ -62,6 +67,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Projectile.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Time.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

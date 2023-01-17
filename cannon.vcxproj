@@ -92,6 +92,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Maths.cpp" />
     <ClCompile Include="src\Projectile.cpp" />
+    <ClCompile Include="src\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\app.hpp" />
@@ -100,6 +101,7 @@
     <ClInclude Include="src\imgui_utils.hpp" />
     <ClInclude Include="src\Maths.hpp" />
     <ClInclude Include="src\Projectile.hpp" />
+    <ClInclude Include="src\Time.h" />
     <ClInclude Include="src\types.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

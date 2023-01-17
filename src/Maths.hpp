@@ -1,5 +1,7 @@
 #pragma once
 #include "calc.hpp"
+#include <cmath>
+
 
 float degToRad(float deg);
 float radToDeg(float rad);

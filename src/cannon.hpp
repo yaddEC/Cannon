@@ -4,6 +4,7 @@
 #include <vector>
 #include "types.hpp"
 #include "Projectile.hpp"
+#include "Time.h"
 
 
 struct CannonState
@@ -51,6 +52,7 @@ public:
     void UpdateAndDraw();
 
 private:
+    Time time;
     CannonRenderer& renderer;
     CannonState cannonState;
     std::vector<Projectile*> projectiles;

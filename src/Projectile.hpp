@@ -2,6 +2,7 @@
 #include "calc.hpp"
 #include <imgui.h>
 
+class CannonRenderer;
 
  class Projectile 
 {
@@ -13,13 +14,17 @@ public:
 	float acceleration;
 	float dragForce;
 	float contactArea;
-	float2 direction;
 	float initialSpeed;
-	float2 pos;
 	float angle;
+	float time = 0;
+
+	float2 direction;
+	float2 pos;
+	float2 initialPos;
+
 	Projectile() {};
 	~Projectile() {};
-	virtual void Update(ImDrawList* dl) {};
+	virtual void Update(CannonRenderer& renderer) {};
 
 };
 
@@ -29,7 +34,7 @@ public:
 	 float radius;
 	 Sphere() {};
 	 Sphere(float radius);
-	 void Update(ImDrawList* dl) override;
+	 void Update(CannonRenderer& renderer) override;
 	 ~Sphere() {};
  };
 
