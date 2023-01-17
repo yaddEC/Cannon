@@ -1,0 +1,6 @@
+/x64/
+*.user
+**/*.o
+**/*.d
+/cannon
+/cannon.exe
