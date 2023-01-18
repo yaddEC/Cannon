@@ -12,7 +12,7 @@ void Sphere::Update(CannonRenderer& renderer)
 {
 	time += Time::GetDeltaTime();
 	pos.x = this->initialSpeed * cos(degToRad(this->angle)) * time + initialPos.x;
-	pos.y += (-GRAVITY / 2) * pow(this->time, 2) + this->initialSpeed * sin(degToRad(this->angle)) * time + initialPos.y;
+	pos.y = (-GRAVITY / 2) * pow(this->time, 2) + this->initialSpeed * sin(degToRad(this->angle)) * time + initialPos.y;
 	renderer.dl->AddCircle(renderer.ToPixels(pos), radius, IM_COL32_WHITE);
 
 
