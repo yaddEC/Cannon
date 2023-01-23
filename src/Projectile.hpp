@@ -8,10 +8,7 @@ class CannonRenderer;
 {
 
 public:
-	
 	float mass;
-	float speed;
-	float acceleration;
 	float dragForce;
 	float contactArea;
 	float initialSpeed;
@@ -19,12 +16,17 @@ public:
 	float time = 0;
 
 	float2 direction;
-	float2 pos;
-	float2 initialPos;
+	float2 position;
+	float2 initialPosition;
+	float2 speed;
+	float2 acceleration;
 
 	Projectile() {};
 	~Projectile() {};
+
 	virtual void Update(CannonRenderer& renderer) {};
+	virtual void DrawCurve(CannonRenderer& renderer) {};
+	virtual void Init() {};
 
 };
 
@@ -32,9 +34,13 @@ public:
  {
  public:
 	 float radius;
+
 	 Sphere() {};
-	 Sphere(float radius);
-	 void Update(CannonRenderer& renderer) override;
+	 Sphere(float radius, float initialS, float ang, float2 initialPos);
 	 ~Sphere() {};
+
+	 void Update(CannonRenderer& renderer) override;
+	 void DrawCurve(CannonRenderer& renderer) override;
+	 void Init() override;
  };
 

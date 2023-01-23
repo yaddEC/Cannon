@@ -2,7 +2,7 @@
 
 #include "types.hpp"
 
-static const float GRAVITY = 9.80665f;
+static const float GRAVITY = 9.80665f * 10.f;
 static const float TAU = 6.28318530717958f;
 
 static inline float2 operator+(float2 a, float2 b) { return { a.x + b.x, a.y + b.y }; }
