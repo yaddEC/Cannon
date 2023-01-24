@@ -1,4 +1,6 @@
 #include "Maths.hpp"
+#include "Projectile.hpp"
+#include "Time.h"
 
 #define M_PI       3.14159265358979323846
 
@@ -20,4 +22,16 @@ float2 rotateVec(float2 tor, float2 origin, float angle)
     tor2.y = sin(degToRad(angle)) * (tor.x - origin.x) + cos(degToRad(angle)) * (tor.y - origin.y) + origin.y;
 
     return tor2;
+}
+
+void calculateSpeedWithoutFriction(Sphere* projectile)
+{
+    projectile->speed += projectile->acceleration * Time::GetDeltaTime();
+}
+
+void calculateSpeedWithLinearFriction(Sphere* projectile)
+{
+    float tau = projectile->mass / (6 * M_PI * VISCOSITY * projectile->radius);
+    projectile->speed.y = (projectile->initialSpeed * sin(degToRad(projectile->angle)) + GRAVITY * tau) * exp(-1 * projectile->time / tau) - GRAVITY * tau;
+    projectile->speed.x = projectile->initialSpeed * cos(degToRad(projectile->angle)) * exp(-1 * projectile->time / tau);
 }

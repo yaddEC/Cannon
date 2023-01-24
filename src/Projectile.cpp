@@ -27,9 +27,9 @@ void Sphere::Update(CannonRenderer& renderer)
 	position.y = (acceleration.y / 2) * pow(time, 2) + initialSpeed * sin(degToRad(angle)) * time + initialPosition.y;
 	*/
 
-	//Donne la position par incrementation
-	speed += acceleration * Time::GetDeltaTime();
-	
+	//calculateSpeedWithoutFriction(this);
+	calculateSpeedWithLinearFriction(this);
+
 	float2 pos = position;
 	if (pos.y < 0)
 		speed.y *= -0.75f;
