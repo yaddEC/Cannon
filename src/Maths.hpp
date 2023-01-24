@@ -7,5 +7,6 @@ class Sphere;
 float degToRad(float deg);
 float radToDeg(float rad);
 float2 rotateVec(float2 tor, float2 origin, float angle);
-void calculateSpeedWithoutFriction(Sphere* projectile);
-void calculateSpeedWithLinearFriction(Sphere* projectile);
+void AccelerationWithoutFriction(Sphere* projectile);
+void AccelerationWithLinearFriction(Sphere* projectile);
+void AccelerationWithQuadraticFriction(Sphere* projectile);

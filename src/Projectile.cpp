@@ -14,21 +14,15 @@ Sphere::Sphere(float radius, float initialS, float ang, float2 initialPos)
 void Sphere::Update(CannonRenderer& renderer)
 {
 	time += Time::GetDeltaTime();
-	
-	/*
-	// Donne la position directement via les equations horaires
-	acceleration.x = 0;
-	acceleration.y = -GRAVITY;
 
-	speed.x = acceleration.x * time + initialSpeed * cos(degToRad(angle));
-	speed.y = acceleration.y * time + initialSpeed * sin(degToRad(angle));
+	if (frictionState == ProjectileFriction::Quadratic)
+		AccelerationWithQuadraticFriction(this);
+	else if (frictionState == ProjectileFriction::Linear)
+		AccelerationWithLinearFriction(this);
+	else
+		AccelerationWithoutFriction(this);
 
-	position.x = (acceleration.x / 2) * pow(time, 2) + initialSpeed * cos(degToRad(angle)) * time + initialPosition.x;
-	position.y = (acceleration.y / 2) * pow(time, 2) + initialSpeed * sin(degToRad(angle)) * time + initialPosition.y;
-	*/
-
-	//calculateSpeedWithoutFriction(this);
-	calculateSpeedWithLinearFriction(this);
+	speed += acceleration * Time::GetDeltaTime();
 
 	float2 pos = position;
 	if (pos.y < 0)

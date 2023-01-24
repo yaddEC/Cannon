@@ -4,6 +4,13 @@
 
 class CannonRenderer;
 
+enum class ProjectileFriction
+{
+	Linear,
+	Quadratic,
+	None,
+};
+
  class Projectile 
 {
 
@@ -14,6 +21,8 @@ public:
 	float initialSpeed;
 	float angle;
 	float time = 0;
+
+	ProjectileFriction frictionState = ProjectileFriction::Quadratic;
 
 	float2 direction;
 	float2 position;

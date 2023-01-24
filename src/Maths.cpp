@@ -24,14 +24,28 @@ float2 rotateVec(float2 tor, float2 origin, float angle)
     return tor2;
 }
 
-void calculateSpeedWithoutFriction(Sphere* projectile)
+void AccelerationWithoutFriction(Sphere* projectile)
 {
-    projectile->speed += projectile->acceleration * Time::GetDeltaTime();
+    projectile->acceleration.x = 0;
+    projectile->acceleration.y = -GRAVITY;
 }
 
-void calculateSpeedWithLinearFriction(Sphere* projectile)
+void AccelerationWithLinearFriction(Sphere* projectile)
 {
-    float tau = projectile->mass / (6 * M_PI * VISCOSITY * projectile->radius);
-    projectile->speed.y = (projectile->initialSpeed * sin(degToRad(projectile->angle)) + GRAVITY * tau) * exp(-1 * projectile->time / tau) - GRAVITY * tau;
-    projectile->speed.x = projectile->initialSpeed * cos(degToRad(projectile->angle)) * exp(-1 * projectile->time / tau);
+    float k = 6 * M_PI * VISCOSITY * projectile->radius;
+    projectile->acceleration.x = (-1 * k * projectile->speed.x) / projectile->mass;
+    projectile->acceleration.y = (-1 * k * projectile->speed.y - projectile->mass * GRAVITY) / projectile->mass;
+}
+
+void AccelerationWithQuadraticFriction(Sphere* projectile)
+{
+    float Rho = 1.225f;
+    float surface = projectile->radius * M_PI;
+    float Cx = 0.45f;
+    float k = 0.5f * Rho * surface * Cx;
+
+    float speed = sqrt(pow(projectile->speed.x, 2) + pow(projectile->speed.y, 2));
+
+    projectile->acceleration.x = (-1 * k * speed * projectile->speed.x) / projectile->mass;
+    projectile->acceleration.y = (-1 * k * speed * projectile->speed.y - projectile->mass * GRAVITY) / projectile->mass;
 }
