@@ -101,6 +101,15 @@ void CannonRenderer::DrawProjectileMotion(const CannonState& cannon)
     // etc...
 }
 
+float CannonRenderer::CannonExit(float a, float L, float Vi)
+{
+    float v;
+
+    v = sqrt(2 * a * L + pow(Vi, 2));
+
+    return v;
+}
+
 CannonGame::CannonGame(CannonRenderer& renderer)
     : renderer(renderer)
 {
@@ -133,6 +142,7 @@ void CannonGame::UpdateAndDraw()
         ImGui::SliderFloat("Width", &cannonState.width, 0.f, 200.f);
         ImGui::SliderFloat("Height", &cannonState.height, 0.f, 200.f);
         ImGui::SliderFloat("Initial Speed", &cannonState.initialSpeed, 0.f, 200.f);
+        ImGui::SliderFloat("Deceleration du au Canon", &cannonState.decelerationDuCanon, -200.f, 0.f);
     }
     ImGui::End();
 
@@ -151,9 +161,12 @@ void CannonGame::UpdateAndDraw()
             ImGui::SliderFloat("initial speed", &sphereDisplay.initialSpeed, 0.1, 100.f);
             if (ImGui::Button("SHOOT!!!!!", ImVec2(100,50)))
             {
-                    projectiles.push_back(new Sphere(cannonState.width, sphereDisplay.initialSpeed, cannonState.angle, cannonState.position));
-               
+                projectiles.push_back(new Sphere(cannonState.width, sphereDisplay.initialSpeed, cannonState.angle, cannonState.position));
 
+                projectiles.back()->canonHeight = cannonState.height;
+                projectiles.back()->canonAngle = cannonState.angle;
+                projectiles.back()->canonDeceleration = cannonState.decelerationDuCanon;
+                projectiles.back()->canonInitalSpeed = cannonState.initialSpeed;
                 projectiles.back()->mass = sphereDisplay.mass;
                 projectiles.back()->Init();
             }

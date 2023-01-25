@@ -16,39 +16,48 @@ void Sphere::Update(CannonRenderer& renderer)
 	time += Time::GetDeltaTime();
 	timeAlive += Time::GetDeltaTime();
 
-	
+	if (norme(this->position - initialPosition) < canonHeight / 13)
+	{
+		vitessFinal = renderer.CannonExit(canonDeceleration, norme(this->position - initialPosition), canonInitalSpeed);
 
-	if (frictionState == ProjectileFriction::Quadratic)
-		AccelerationWithQuadraticFriction(this);
-	else if (frictionState == ProjectileFriction::Linear)
-		AccelerationWithLinearFriction(this);
+		this->position.x += vitessFinal * cos(degToRad(canonAngle)) * Time::GetDeltaTime();
+		this->position.y += vitessFinal * sin(degToRad(canonAngle)) * Time::GetDeltaTime();
+	}
 	else
-		AccelerationWithoutFriction(this);
+	{
 
-	speed += acceleration * Time::GetDeltaTime();
+		if (frictionState == ProjectileFriction::Quadratic)
+			AccelerationWithQuadraticFriction(this);
+		else if (frictionState == ProjectileFriction::Linear)
+			AccelerationWithLinearFriction(this);
+		else
+			AccelerationWithoutFriction(this);
 
-	float2 pos = position;
-	printf("speed.x : %f\n", speed.x);
-	printf("speed.y : %f\n", speed.y);
-	if (pos.y < 0 + radius/28 && !bounce )
-	{
-		bounce = true;
-		time = 0;
-		speed.y *= -0.75f;
-		
+		speed += acceleration * Time::GetDeltaTime();
+
+		float2 pos = position;
+		printf("speed.x : %f\n", speed.x);
+		printf("speed.y : %f\n", speed.y);
+		if (pos.y < 0 + radius / 28 && !bounce)
+		{
+			bounce = true;
+			time = 0;
+			speed.y *= -0.75f;
+
+		}
+
+		if (bounceDelay > 0)
+		{
+			bounceDelay = 0;
+			bounce = false;
+		}
+		if (bounce)
+		{
+			bounceDelay++;
+		}
+
+		position += speed * Time::GetDeltaTime();
 	}
-	
-	if (bounceDelay > 0)
-	{
-		bounceDelay = 0;
-		bounce = false;
-	}
-	if (bounce)
-	{
-		bounceDelay++;
-	}
-		
-	position += speed * Time::GetDeltaTime();
 
 
 	renderer.dl->AddCircle(renderer.ToPixels(position), radius, IM_COL32_WHITE);

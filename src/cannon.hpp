@@ -14,6 +14,7 @@ struct CannonState
     float width;
     float height;
     float initialSpeed;
+    float decelerationDuCanon;
 };
 
 // Renderer class
@@ -41,6 +42,7 @@ public:
     void ToShoot();
     void DrawCannon(const CannonState& cannon);
     void DrawProjectileMotion(const CannonState& cannon);
+    float CannonExit(float a, float L, float IS);
 };
 
 class CannonGame

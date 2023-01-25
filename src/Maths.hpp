@@ -6,6 +6,7 @@ class Sphere;
 
 float degToRad(float deg);
 float radToDeg(float rad);
+float norme(float2 vec);
 float2 rotateVec(float2 tor, float2 origin, float angle);
 void AccelerationWithoutFriction(Sphere* projectile);
 void AccelerationWithLinearFriction(Sphere* projectile);

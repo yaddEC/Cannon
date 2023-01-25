@@ -14,6 +14,15 @@ float radToDeg(float rad)
     return rad * 180 / M_PI;
 }
 
+float norme(float2 vec)
+{
+    float a;
+
+    a = sqrt(pow(vec.x, 2) + pow(vec.y, 2));
+
+    return a;
+}
+
 float2 rotateVec(float2 tor, float2 origin, float angle)
 {
     float2 tor2;
