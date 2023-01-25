@@ -23,6 +23,11 @@ float norme(float2 vec)
     return a;
 }
 
+float lerp(float a, float b, float t)
+{
+    return a + t * (b - a);
+}
+
 float2 rotateVec(float2 tor, float2 origin, float angle)
 {
     float2 tor2;

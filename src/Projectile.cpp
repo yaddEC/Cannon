@@ -16,7 +16,7 @@ void Sphere::Update(CannonRenderer& renderer)
 	time += Time::GetDeltaTime();
 	timeAlive += Time::GetDeltaTime();
 
-	if (norme(this->position - initialPosition) < canonHeight / 13)
+	if (norme(this->position - initialPosition) < canonHeight / 13 && !isOut)
 	{
 		vitessFinal = renderer.CannonExit(canonDeceleration, norme(this->position - initialPosition), canonInitalSpeed);
 
@@ -25,7 +25,7 @@ void Sphere::Update(CannonRenderer& renderer)
 	}
 	else
 	{
-
+		isOut = true;
 		if (frictionState == ProjectileFriction::Quadratic)
 			AccelerationWithQuadraticFriction(this);
 		else if (frictionState == ProjectileFriction::Linear)
@@ -60,7 +60,7 @@ void Sphere::Update(CannonRenderer& renderer)
 	}
 
 
-	renderer.dl->AddCircle(renderer.ToPixels(position), radius, IM_COL32_WHITE);
+	renderer.dl->AddCircle(renderer.ToPixels(position), radius, IM_COL32_WHITE,0,4);
 
 	DrawCurve(renderer);
 }
@@ -73,7 +73,7 @@ void Sphere::DrawCurve(CannonRenderer& renderer)
 	{
 		point2.x = i + initialPosition.x;
 		point2.y = -GRAVITY / 2 * pow((point2.x - initialPosition.x) / (initialSpeed * cos(degToRad(angle))), 2) + tan(degToRad(angle)) * (point2.x - initialPosition.x) + initialPosition.y;
-		renderer.dl->AddLine(renderer.ToPixels(point1), renderer.ToPixels(point2), IM_COL32_WHITE);
+		renderer.dl->AddLine(renderer.ToPixels(point1), renderer.ToPixels(point2), IM_COL32_WHITE,2);
 		point1 = point2;
 	}
 }

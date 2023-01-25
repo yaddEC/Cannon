@@ -29,6 +29,7 @@ public:
 	float vitessFinal = 0;
 
 	bool bounce = false;
+	bool isOut = false;
 	int bounceDelay = 0;
 	ProjectileFriction frictionState = ProjectileFriction::Quadratic;
 
