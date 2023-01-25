@@ -147,16 +147,12 @@ void CannonGame::UpdateAndDraw()
 
         if (item_current == 0)
         {
-            ImGui::SliderFloat("radius", &sphereDisplay.radius, 0.1, cannonState.width);
             ImGui::SliderFloat("mass", &sphereDisplay.mass, 0.1, 15.f);
             ImGui::SliderFloat("initial speed", &sphereDisplay.initialSpeed, 0.1, 100.f);
             if (ImGui::Button("SHOOT!!!!!", ImVec2(100,50)))
             {
-                
-                if (sphereDisplay.radius > cannonState.width)
                     projectiles.push_back(new Sphere(cannonState.width, sphereDisplay.initialSpeed, cannonState.angle, cannonState.position));
-                else
-                    projectiles.push_back(new Sphere(sphereDisplay.radius, sphereDisplay.initialSpeed, cannonState.angle, cannonState.position));
+               
 
                 projectiles.back()->mass = sphereDisplay.mass;
                 projectiles.back()->Init();
@@ -175,7 +171,7 @@ void CannonGame::UpdateAndDraw()
     {
 
         (*it)->Update(renderer);
-        if ((*it)->position.x > 25 || (*it)->position.x < -25)
+        if ((*it)->timeAlive > 2)
         {
             it = projectiles.erase(it);
         }

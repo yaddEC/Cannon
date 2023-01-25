@@ -14,6 +14,9 @@ Sphere::Sphere(float radius, float initialS, float ang, float2 initialPos)
 void Sphere::Update(CannonRenderer& renderer)
 {
 	time += Time::GetDeltaTime();
+	timeAlive += Time::GetDeltaTime();
+
+	
 
 	if (frictionState == ProjectileFriction::Quadratic)
 		AccelerationWithQuadraticFriction(this);
@@ -25,8 +28,25 @@ void Sphere::Update(CannonRenderer& renderer)
 	speed += acceleration * Time::GetDeltaTime();
 
 	float2 pos = position;
-	if (pos.y < 0)
+	printf("speed.x : %f\n", speed.x);
+	printf("speed.y : %f\n", speed.y);
+	if (pos.y < 0 + radius/28 && !bounce )
+	{
+		bounce = true;
+		time = 0;
 		speed.y *= -0.75f;
+		
+	}
+	
+	if (bounceDelay > 0)
+	{
+		bounceDelay = 0;
+		bounce = false;
+	}
+	if (bounce)
+	{
+		bounceDelay++;
+	}
 		
 	position += speed * Time::GetDeltaTime();
 

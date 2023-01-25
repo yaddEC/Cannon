@@ -21,7 +21,9 @@ public:
 	float initialSpeed;
 	float angle;
 	float time = 0;
-
+	float timeAlive = 0;
+	bool bounce = false;
+	int bounceDelay = 0;
 	ProjectileFriction frictionState = ProjectileFriction::Quadratic;
 
 	float2 direction;
