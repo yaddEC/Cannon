@@ -15,6 +15,7 @@ enum class ProjectileFriction
 {
 
 public:
+	//Projectile Variables
 	float mass;
 	float dragForce;
 	float contactArea;
@@ -22,22 +23,31 @@ public:
 	float angle;
 	float time = 0;
 	float timeAlive = 0;
-	float canonHeight = 0;
-	float canonAngle = 0;
-	float canonDeceleration = 0;
-	float canonInitalSpeed = 0;
-	float vitessFinal = 0;
-
-	bool bounce = false;
-	bool isOut = false;
-	int bounceDelay = 0;
-	ProjectileFriction frictionState = ProjectileFriction::Quadratic;
 
 	float2 direction;
 	float2 position;
 	float2 initialPosition;
 	float2 speed;
 	float2 acceleration;
+
+	ProjectileFriction frictionState = ProjectileFriction::Quadratic;
+
+	//Canon Variables
+	float canonHeight = 0;
+	float canonAngle = 0;
+	float canonDeceleration = 0;
+	float canonInitalSpeed = 0;
+	float vitesseFinal = 0;
+
+	//Bounce Variables
+	bool bounce = false;
+	bool isOut = false;
+	int bounceDelay = 0;
+
+	//Curve Variables
+	float2 newInitialPosition;
+	float newInitialSpeed;
+
 
 	Projectile() {};
 	~Projectile() {};

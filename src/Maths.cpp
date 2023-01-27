@@ -53,7 +53,7 @@ void AccelerationWithLinearFriction(Sphere* projectile)
 
 void AccelerationWithQuadraticFriction(Sphere* projectile)
 {
-    float Rho = 1.225f;
+    float Rho = 0.1225f;
     float surface = pow(projectile->radius/20, 2) * 2 * M_PI;
     float Cx = 0.45f;
     float k = 0.5f * Rho * surface * Cx;

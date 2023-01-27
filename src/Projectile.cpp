@@ -18,10 +18,10 @@ void Sphere::Update(CannonRenderer& renderer)
 
 	if (norme(this->position - initialPosition) < canonHeight / 13 && !isOut)
 	{
-		vitessFinal = renderer.CannonExit(canonDeceleration, norme(this->position - initialPosition), canonInitalSpeed);
+		vitesseFinal = renderer.CannonExit(canonDeceleration, norme(this->position - initialPosition), canonInitalSpeed);
 
-		this->position.x += vitessFinal * cos(degToRad(canonAngle)) * Time::GetDeltaTime();
-		this->position.y += vitessFinal * sin(degToRad(canonAngle)) * Time::GetDeltaTime();
+		this->position.x += vitesseFinal * cos(degToRad(canonAngle)) * Time::GetDeltaTime();
+		this->position.y += vitesseFinal * sin(degToRad(canonAngle)) * Time::GetDeltaTime();
 	}
 	else
 	{
@@ -72,8 +72,21 @@ void Sphere::DrawCurve(CannonRenderer& renderer)
 	for (int i = 0; i < 100; i++)
 	{
 		point2.x = i + initialPosition.x;
-		point2.y = -GRAVITY / 2 * pow((point2.x - initialPosition.x) / (initialSpeed * cos(degToRad(angle))), 2) + tan(degToRad(angle)) * (point2.x - initialPosition.x) + initialPosition.y;
-		renderer.dl->AddLine(renderer.ToPixels(point1), renderer.ToPixels(point2), IM_COL32_WHITE,2);
+
+		if (i <= canonHeight / 13 * cos(degToRad(angle)))
+		{
+			point2.y = tan(degToRad(angle)) * (point2.x - initialPosition.x) + initialPosition.y;
+		}
+		else
+		{
+			newInitialPosition.x = initialPosition.x + canonHeight / 13 * cos(degToRad(angle));
+			newInitialPosition.y = initialPosition.y + canonHeight / 13 * sin(degToRad(angle));
+			newInitialSpeed = renderer.CannonExit(canonDeceleration, canonHeight, canonInitalSpeed);
+
+			point2.y = -GRAVITY / 2 * pow((point2.x - newInitialPosition.x) / (newInitialSpeed * cos(degToRad(angle))), 2) + tan(degToRad(angle)) * (point2.x - newInitialPosition.x) + newInitialPosition.y;
+		}
+
+		renderer.dl->AddLine(renderer.ToPixels(point1), renderer.ToPixels(point2), IM_COL32_WHITE, 2);
 		point1 = point2;
 	}
 }

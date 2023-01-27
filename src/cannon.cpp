@@ -165,6 +165,14 @@ void CannonGame::UpdateAndDraw()
     if (LineOpacity > 40 || LineOpacity < 0)
     {
         opacity *= -1;
+        if (LineOpacity < 0)
+        {
+            LineOpacity = 0;
+        }
+        if (LineOpacity > 40)
+        {
+            LineOpacity = 40;
+        }
     }
 
     LineDelay += Time::GetDeltaTime();
@@ -229,11 +237,17 @@ void CannonGame::UpdateAndDraw()
         if (item_current == 0)
         {
             ImGui::SliderFloat("mass", &sphereDisplay.mass, 0.1, 15.f);
-            if (ImGui::Button("SHOOT!!!!!", ImVec2(100,50)))
+
+            const char* frictions[] = { "Linear","Quadratic","None" };
+            static int friction_current = 0;
+            ImGui::Combo("Friction", &friction_current, frictions, IM_ARRAYSIZE(frictions));
+
+            if (ImGui::Button("SHOOT!!!!!", ImVec2(100, 50)))
             {
                 projectiles.push_back(new Sphere(cannonState.width, cannonState.initialSpeed, cannonState.angle, cannonState.position));
 
                 projectiles.back()->canonHeight = cannonState.height;
+                projectiles.back()->frictionState = static_cast<ProjectileFriction>(friction_current);
                 projectiles.back()->canonAngle = cannonState.angle;
                 projectiles.back()->canonDeceleration = cannonState.decelerationDuCanon;
                 projectiles.back()->canonInitalSpeed = cannonState.initialSpeed;
@@ -241,8 +255,6 @@ void CannonGame::UpdateAndDraw()
                 projectiles.back()->Init();
             }
         }
-
-
     }
     ImGui::End();
 
