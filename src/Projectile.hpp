@@ -34,6 +34,7 @@ public:
 
 	//Canon Variables
 	float canonHeight = 0;
+	float canonWidth = 0;
 	float canonAngle = 0;
 	float canonDeceleration = 0;
 	float canonInitalSpeed = 0;

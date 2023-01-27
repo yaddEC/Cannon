@@ -79,7 +79,7 @@ void CannonRenderer::DrawCannon(const CannonState& cannon)
     // TODO: Draw cannon
 
     // For example (Remove this and do your own)
-    float2 pos = this->ToPixels(cannon.position);
+    float2 pos = cannon.position;
     float2 cannonEdge[4];
     float2 cannonOrigin;
     cannonEdge[0].x = pos.x - cannon.width;
@@ -94,12 +94,14 @@ void CannonRenderer::DrawCannon(const CannonState& cannon)
     cannonEdge[3].x = pos.x + cannon.width;
     cannonEdge[3].y = pos.y;
 
-    cannonOrigin.x = pos.x;
-    cannonOrigin.y = pos.y;
+    cannonOrigin = ToPixels(pos);
+
+
 
     for (int i = 0; i < 4; i++)
     {
-        cannonEdge[i] = rotateVec(cannonEdge[i], cannonOrigin, 90 - cannon.angle);
+        cannonEdge[i] = ToPixels(cannonEdge[i]);
+        cannonEdge[i] = rotateVec(cannonEdge[i], cannonOrigin, 270 - cannon.angle);
     }
 
     dl->AddCircle(pos, 10.f, IM_COL32_WHITE, 0, 4);
@@ -113,6 +115,7 @@ void CannonRenderer::DrawCannon(const CannonState& cannon)
     dl->AddCircleFilled(cannonEdge[2], 5, IM_COL32_WHITE);
     dl->AddCircleFilled(cannonEdge[3], 5, IM_COL32_WHITE);
 }
+
 
 
 void CannonRenderer::DrawProjectileMotion(const CannonState& cannon)
@@ -138,8 +141,8 @@ CannonGame::CannonGame(CannonRenderer& renderer)
     time.Init();
 
     cannonState.position.x = -22.f;
-    cannonState.height = 50;
-    cannonState.width = 25;
+    cannonState.height = 2;
+    cannonState.width = 1;
     target.position.x = 0;
     target.position.y = 0;
     target.height = 10;
@@ -214,7 +217,7 @@ void CannonGame::UpdateAndDraw()
 
     }
 
-    if (ImGui::Begin("Canon state", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+    if (ImGui::Begin("Canon state", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
     {
         ImGui::Combo("combo", &item_current, items, IM_ARRAYSIZE(items));
         // TODO: Add UI to edit other cannon state variables here
@@ -229,8 +232,8 @@ void CannonGame::UpdateAndDraw()
         {
             ImGui::Indent(10);
             ImGui::SliderFloat("Angle", &cannonState.angle, 0.f, 90.f);
-            ImGui::SliderFloat("Width", &cannonState.width, 0.f, 200.f);
-            ImGui::SliderFloat("Height", &cannonState.height, 0.f, 200.f);
+            ImGui::SliderFloat("Width", &cannonState.width, 0.f, 2.f);
+            ImGui::SliderFloat("Height", &cannonState.height, 0.f, 4.f);
             ImGui::Unindent(10);
         }
         if (ImGui::CollapsingHeader("Cannon Projectile Data", ImGuiTreeNodeFlags_DefaultOpen))
@@ -250,6 +253,7 @@ void CannonGame::UpdateAndDraw()
                     projectiles.push_back(new Sphere(cannonState.width, cannonState.initialSpeed, cannonState.angle, cannonState.position));
 
                     projectiles.back()->canonHeight = cannonState.height;
+                    projectiles.back()->canonWidth = cannonState.width;
                     projectiles.back()->frictionState = static_cast<ProjectileFriction>(friction_current);
                     projectiles.back()->canonAngle = cannonState.angle;
                     projectiles.back()->canonDeceleration = cannonState.decelerationDuCanon;

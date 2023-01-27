@@ -16,7 +16,11 @@ void Sphere::Update(CannonRenderer& renderer)
 	time += Time::GetDeltaTime();
 	timeAlive += Time::GetDeltaTime();
 
-	if (norme(this->position - initialPosition) < canonHeight / 13 && !isOut)
+	float2 cannon = { initialPosition.x - canonWidth, initialPosition.y - canonHeight * 2 };
+	float2 cannon2 = { initialPosition.x - canonWidth, initialPosition.y };
+	float2 cannon3 = { initialPosition.x + canonWidth, initialPosition.y - canonHeight * 2 };
+	
+	if (norme(this->position - initialPosition) < norme(cannon - cannon2) && !isOut)
 	{
 		vitesseFinal = renderer.CannonExit(canonDeceleration, norme(this->position - initialPosition), canonInitalSpeed);
 
@@ -36,9 +40,8 @@ void Sphere::Update(CannonRenderer& renderer)
 		speed += acceleration * Time::GetDeltaTime();
 
 		float2 pos = position;
-		printf("speed.x : %f\n", speed.x);
-		printf("speed.y : %f\n", speed.y);
-		if (pos.y < 0 + radius / 28 && !bounce)
+	
+		if (pos.y-radius < 0   && !bounce)
 		{
 			bounce = true;
 			time = 0;
@@ -60,7 +63,7 @@ void Sphere::Update(CannonRenderer& renderer)
 	}
 
 
-	renderer.dl->AddCircle(renderer.ToPixels(position), radius, IM_COL32_WHITE,0,4);
+	renderer.dl->AddCircle(renderer.ToPixels(position), norme(renderer.ToPixels(cannon) - renderer.ToPixels(cannon3)) / 2, IM_COL32_WHITE,0,4);
 
 	DrawCurve(renderer);
 }
@@ -69,18 +72,22 @@ void Sphere::DrawCurve(CannonRenderer& renderer)
 {
 	float2 point1 = initialPosition;
 	float2 point2;
+
+	float2 cannon = { initialPosition.x - canonWidth, initialPosition.y - canonHeight * 2 };
+	float2 cannon2 = { initialPosition.x - canonWidth, initialPosition.y };
+
 	for (int i = 0; i < 100; i++)
 	{
 		point2.x = i + initialPosition.x;
 
-		if (i <= canonHeight / 13 * cos(degToRad(angle)))
+		if (i <= norme(cannon - cannon2) * cos(degToRad(angle)))
 		{
 			point2.y = tan(degToRad(angle)) * (point2.x - initialPosition.x) + initialPosition.y;
 		}
 		else
 		{
-			newInitialPosition.x = initialPosition.x + canonHeight / 13 * cos(degToRad(angle));
-			newInitialPosition.y = initialPosition.y + canonHeight / 13 * sin(degToRad(angle));
+			newInitialPosition.x = initialPosition.x + norme(cannon - cannon2) * cos(degToRad(angle));
+			newInitialPosition.y = initialPosition.y + norme(cannon - cannon2) * sin(degToRad(angle));
 			newInitialSpeed = renderer.CannonExit(canonDeceleration, canonHeight, canonInitalSpeed);
 
 			point2.y = -GRAVITY / 2 * pow((point2.x - newInitialPosition.x) / (newInitialSpeed * cos(degToRad(angle))), 2) + tan(degToRad(angle)) * (point2.x - newInitialPosition.x) + newInitialPosition.y;

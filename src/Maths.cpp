@@ -46,7 +46,7 @@ void AccelerationWithoutFriction(Sphere* projectile)
 
 void AccelerationWithLinearFriction(Sphere* projectile)
 {
-    float k = 6 * M_PI * VISCOSITY * projectile->radius/20;
+    float k = 6 * M_PI * VISCOSITY * projectile->radius;
     projectile->acceleration.x = (-1 * k * projectile->speed.x) / projectile->mass;
     projectile->acceleration.y = (-1 * k * projectile->speed.y - projectile->mass * GRAVITY) / projectile->mass;
 }
@@ -54,7 +54,7 @@ void AccelerationWithLinearFriction(Sphere* projectile)
 void AccelerationWithQuadraticFriction(Sphere* projectile)
 {
     float Rho = 0.1225f;
-    float surface = projectile->radius/20 * M_PI;
+    float surface = projectile->radius * M_PI;
     float Cx = 0.45f;
     float k = 0.5f * Rho * surface * Cx;
 
