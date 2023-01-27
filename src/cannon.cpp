@@ -97,8 +97,6 @@ void CannonRenderer::DrawCannon(const CannonState& cannon)
     cannonOrigin.x = pos.x;
     cannonOrigin.y = pos.y;
 
-
-
     for (int i = 0; i < 4; i++)
     {
         cannonEdge[i] = rotateVec(cannonEdge[i], cannonOrigin, 90 - cannon.angle);
@@ -193,6 +191,10 @@ void CannonGame::UpdateAndDraw()
     renderer.PreUpdate();
     time.Update();
 
+    const char* items[] = { "Sphere", "Cube" };
+    static int item_current = 0;
+
+
     renderer.dl->AddRectFilledMultiColor(renderer.ToPixels({ -25,-25 }), renderer.ToPixels({ 25,25 }), IM_COL32(0, 0, upprLeft.colorTemp / 1.5, 255), IM_COL32(0, 0, upprRight.colorTemp / 1.5, 255), IM_COL32(0, 0, bottmLeft.colorTemp / 2, 255), IM_COL32(0, 0, bottmRight.colorTemp / 2, 255));
     for (auto it = stylisedLines.begin(); it != stylisedLines.end(); )
     {
@@ -212,16 +214,36 @@ void CannonGame::UpdateAndDraw()
 
     }
 
-    if (ImGui::Begin("Canon state", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+    if (ImGui::Begin("Canon state", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
     {
+        ImGui::Combo("combo", &item_current, items, IM_ARRAYSIZE(items));
         // TODO: Add UI to edit other cannon state variables here
-        ImGui::SliderFloat("Cannon Position Y", &cannonState.position.y, 0, 15.f);
-        ImGui::SliderFloat("Cannon Position X", &cannonState.position.x, -25.f, 15.f);
-        ImGui::SliderFloat("Angle", &cannonState.angle, 0.f, 90.f);
-        ImGui::SliderFloat("Width", &cannonState.width, 0.f, 200.f);
-        ImGui::SliderFloat("Height", &cannonState.height, 0.f, 200.f);
-        ImGui::SliderFloat("Initial Speed", &cannonState.initialSpeed, 0.f, 200.f);
-        ImGui::SliderFloat("Deceleration du au Canon", &cannonState.decelerationDuCanon, -200.f, 0.f);
+        if (ImGui::CollapsingHeader("Position", ImGuiTreeNodeFlags_DefaultOpen))
+        {
+            ImGui::Indent(10);
+            ImGui::SliderFloat("Cannon Position Y", &cannonState.position.y, 0, 15.f);
+            ImGui::SliderFloat("Cannon Position X", &cannonState.position.x, -25.f, 15.f);
+            ImGui::Unindent(10);
+        }
+        if (ImGui::CollapsingHeader("Cannon Measurement", ImGuiTreeNodeFlags_DefaultOpen))
+        {
+            ImGui::Indent(10);
+            ImGui::SliderFloat("Angle", &cannonState.angle, 0.f, 90.f);
+            ImGui::SliderFloat("Width", &cannonState.width, 0.f, 200.f);
+            ImGui::SliderFloat("Height", &cannonState.height, 0.f, 200.f);
+            ImGui::Unindent(10);
+        }
+        if (ImGui::CollapsingHeader("Cannon Projectile Data", ImGuiTreeNodeFlags_DefaultOpen))
+        {
+            ImGui::Indent(10);
+            ImGui::SliderFloat("Initial Speed", &cannonState.initialSpeed, 0.f, 200.f);
+            ImGui::SliderFloat("Deceleration du au Canon", &cannonState.decelerationDuCanon, -200.f, 0.f);
+            if (item_current == 0)
+            {
+                ImGui::SliderFloat("mass", &sphereDisplay.mass, 1, 15.f);
+            }
+            ImGui::Unindent(10);
+        }
     }
     ImGui::End();
 
