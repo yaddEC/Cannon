@@ -241,41 +241,24 @@ void CannonGame::UpdateAndDraw()
             if (item_current == 0)
             {
                 ImGui::SliderFloat("mass", &sphereDisplay.mass, 1, 15.f);
+                const char* frictions[] = { "Linear","Quadratic","None" };
+                static int friction_current = 0;
+                ImGui::Combo("Friction", &friction_current, frictions, IM_ARRAYSIZE(frictions));
+
+                if (ImGui::Button("SHOOT!!!!!", ImVec2(100, 50)))
+                {
+                    projectiles.push_back(new Sphere(cannonState.width, cannonState.initialSpeed, cannonState.angle, cannonState.position));
+
+                    projectiles.back()->canonHeight = cannonState.height;
+                    projectiles.back()->frictionState = static_cast<ProjectileFriction>(friction_current);
+                    projectiles.back()->canonAngle = cannonState.angle;
+                    projectiles.back()->canonDeceleration = cannonState.decelerationDuCanon;
+                    projectiles.back()->canonInitalSpeed = cannonState.initialSpeed;
+                    projectiles.back()->mass = sphereDisplay.mass;
+                    projectiles.back()->Init();
+                }
             }
             ImGui::Unindent(10);
-        }
-    }
-    ImGui::End();
-
-    if (ImGui::Begin("Projectile", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
-    {
-        // TODO: Add UI to edit other cannon state variables here
-        const char* items[] = { "Sphere"};
-        static int item_current = 0;
-        ImGui::Combo(" ", &item_current, items, IM_ARRAYSIZE(items));
-       
-     
-
-        if (item_current == 0)
-        {
-            ImGui::SliderFloat("mass", &sphereDisplay.mass, 0.1, 15.f);
-
-            const char* frictions[] = { "Linear","Quadratic","None" };
-            static int friction_current = 0;
-            ImGui::Combo("Friction", &friction_current, frictions, IM_ARRAYSIZE(frictions));
-
-            if (ImGui::Button("SHOOT!!!!!", ImVec2(100, 50)))
-            {
-                projectiles.push_back(new Sphere(cannonState.width, cannonState.initialSpeed, cannonState.angle, cannonState.position));
-
-                projectiles.back()->canonHeight = cannonState.height;
-                projectiles.back()->frictionState = static_cast<ProjectileFriction>(friction_current);
-                projectiles.back()->canonAngle = cannonState.angle;
-                projectiles.back()->canonDeceleration = cannonState.decelerationDuCanon;
-                projectiles.back()->canonInitalSpeed = cannonState.initialSpeed;
-                projectiles.back()->mass = sphereDisplay.mass;
-                projectiles.back()->Init();
-            }
         }
     }
     ImGui::End();
