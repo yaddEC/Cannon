@@ -20,12 +20,15 @@ void Sphere::Update(CannonRenderer& renderer)
 	float2 cannon2 = { initialPosition.x - canonWidth, initialPosition.y };
 	float2 cannon3 = { initialPosition.x + canonWidth, initialPosition.y - canonHeight * 2 };
 	
-	if (norme(this->position - initialPosition) < norme(cannon - cannon2) && !isOut)
+	if (norme(position - initialPosition) < norme(cannon - cannon2) && !isOut)
 	{
-		vitesseFinal = renderer.CannonExit(canonDeceleration, norme(this->position - initialPosition), canonInitalSpeed);
+		vitesseFinal = CannonFriction(canonDeceleration, norme(position - initialPosition), canonInitalSpeed);
 
-		this->position.x += vitesseFinal * cos(degToRad(canonAngle)) * Time::GetDeltaTime();
-		this->position.y += vitesseFinal * sin(degToRad(canonAngle)) * Time::GetDeltaTime();
+		speed.x = vitesseFinal * cos(degToRad(canonAngle));
+		speed.y = vitesseFinal * sin(degToRad(canonAngle));
+
+		this->position.x += speed.x * Time::GetDeltaTime();
+		this->position.y += speed.y * Time::GetDeltaTime();
 	}
 	else
 	{
@@ -88,9 +91,9 @@ void Sphere::DrawCurve(CannonRenderer& renderer)
 		{
 			newInitialPosition.x = initialPosition.x + norme(cannon - cannon2) * cos(degToRad(angle));
 			newInitialPosition.y = initialPosition.y + norme(cannon - cannon2) * sin(degToRad(angle));
-			newInitialSpeed = renderer.CannonExit(canonDeceleration, canonHeight, canonInitalSpeed);
+			newInitialSpeed = CannonFriction(canonDeceleration, norme(newInitialPosition - initialPosition), canonInitalSpeed);
 
-			point2.y = -GRAVITY / 2 * pow((point2.x - newInitialPosition.x) / (newInitialSpeed * cos(degToRad(angle))), 2) + tan(degToRad(angle)) * (point2.x - newInitialPosition.x) + newInitialPosition.y;
+			point2.y = -GRAVITY / 2 * pow((point2.x - newInitialPosition.x) / (newInitialSpeed * cos(degToRad(angle))), 2) + (point2.x - newInitialPosition.x) * tan(degToRad(angle)) + newInitialPosition.y;
 		}
 
 		renderer.dl->AddLine(renderer.ToPixels(point1), renderer.ToPixels(point2), IM_COL32_WHITE, 2);

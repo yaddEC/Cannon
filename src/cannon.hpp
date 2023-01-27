@@ -69,7 +69,6 @@ public:
     void ToShoot();
     void DrawCannon(const CannonState& cannon);
     void DrawProjectileMotion(const CannonState& cannon);
-    float CannonExit(float a, float L, float IS);
 };
 
 class CannonGame

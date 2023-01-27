@@ -4,7 +4,7 @@
 
 static const float GRAVITY = 9.80665f * 10.f;
 static const float TAU = 6.28318530717958f;
-static const float VISCOSITY = 0.0000185f ;
+static const float VISCOSITY = 0.0000185f * 1000;
 
 static inline float2 operator+(float2 a, float2 b) { return { a.x + b.x, a.y + b.y }; }
 static inline float2 operator-(float2 a, float2 b) { return { a.x - b.x, a.y - b.y }; }

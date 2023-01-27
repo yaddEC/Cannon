@@ -11,4 +11,5 @@ float2 rotateVec(float2 tor, float2 origin, float angle);
 void AccelerationWithoutFriction(Sphere* projectile);
 void AccelerationWithLinearFriction(Sphere* projectile);
 void AccelerationWithQuadraticFriction(Sphere* projectile);
+float CannonFriction(float a, float L, float Vi);
 float lerp(float a, float b, float t);

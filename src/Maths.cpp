@@ -63,3 +63,12 @@ void AccelerationWithQuadraticFriction(Sphere* projectile)
     projectile->acceleration.x = (-1 * k * speed * projectile->speed.x) / projectile->mass;
     projectile->acceleration.y = (-1 * k * speed * projectile->speed.y - projectile->mass * GRAVITY) / projectile->mass;
 }
+
+float CannonFriction(float a, float L, float Vi)
+{
+    float v;
+
+    v = sqrt(2 * a * L + pow(Vi, 2));
+
+    return v;
+}

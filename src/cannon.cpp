@@ -104,7 +104,7 @@ void CannonRenderer::DrawCannon(const CannonState& cannon)
         cannonEdge[i] = rotateVec(cannonEdge[i], cannonOrigin, 270 - cannon.angle);
     }
 
-    dl->AddCircle(pos, 10.f, IM_COL32_WHITE, 0, 4);
+    dl->AddCircle(cannonOrigin, 10.f, IM_COL32_WHITE, 0, 4);
 
     dl->AddLine(cannonEdge[0], cannonEdge[1], IM_COL32_WHITE, 4);
     dl->AddLine(cannonEdge[2], cannonEdge[3], IM_COL32_WHITE, 4);
@@ -124,15 +124,6 @@ void CannonRenderer::DrawProjectileMotion(const CannonState& cannon)
     // e.g. dl->AddLine(...)
     // e.g. dl->PathLineTo(...)
     // etc...
-}
-
-float CannonRenderer::CannonExit(float a, float L, float Vi)
-{
-    float v;
-
-    v = sqrt(2 * a * L + pow(Vi, 2));
-
-    return v;
 }
 
 CannonGame::CannonGame(CannonRenderer& renderer)
@@ -198,7 +189,7 @@ void CannonGame::UpdateAndDraw()
     static int item_current = 0;
 
 
-    renderer.dl->AddRectFilledMultiColor(renderer.ToPixels({ -25,-25 }), renderer.ToPixels({ 25,25 }), IM_COL32(0, 0, upprLeft.colorTemp / 1.5, 255), IM_COL32(0, 0, upprRight.colorTemp / 1.5, 255), IM_COL32(0, 0, bottmLeft.colorTemp / 2, 255), IM_COL32(0, 0, bottmRight.colorTemp / 2, 255));
+    renderer.dl->AddRectFilledMultiColor({ 0,0 }, { renderer.io->DisplaySize.x,renderer.io->DisplaySize.y }, IM_COL32(0, 0, upprLeft.colorTemp / 1.5, 255), IM_COL32(0, 0, upprRight.colorTemp / 1.5, 255), IM_COL32(0, 0, bottmLeft.colorTemp / 2, 255), IM_COL32(0, 0, bottmRight.colorTemp / 2, 255));
     for (auto it = stylisedLines.begin(); it != stylisedLines.end(); )
     {
         movePoint((*it).start, 30, 0.1f);
