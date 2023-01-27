@@ -10,10 +10,10 @@
 struct CannonState
 {
     float2 position;
-    float angle; // In radians
+    float angle = 45; // In radians
     float width;
     float height;
-    float initialSpeed;
+    float initialSpeed = 25;
     float decelerationDuCanon;
 };
 

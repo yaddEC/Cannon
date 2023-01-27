@@ -15,7 +15,7 @@ enum class ProjectileFriction
 {
 
 public:
-	float mass;
+	float mass = 1;
 	float dragForce;
 	float contactArea;
 	float initialSpeed;
