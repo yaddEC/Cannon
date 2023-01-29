@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <random>
+#include <string>
 
 #include "calc.hpp"
 #include "cannon.hpp"
@@ -66,12 +67,39 @@ float2 CannonRenderer::ToWorld(float2 coordinatesInPixels)
     return (coordinatesInPixels - worldOrigin) / worldScale;
 }
 
+bool CannonRenderer::circleCircleCollision(float x1, float y1, float r1, float x2, float y2, float r2)
+{
+    float distance = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+    return distance < (r1 + r2);
+    
+}
+
 void CannonRenderer::DrawGround()
 {
     float2 left = this->ToPixels({ -100.f, 0.f });
     float2 right = this->ToPixels({ +100.f, 0.f });
 
     dl->AddLine(left, right, IM_COL32_WHITE, 4);
+}
+
+void CannonRenderer::DrawBasket()
+{
+    float2 Bar1 = this->ToPixels({20.f, 13.f});
+    float2 Bar2 = this->ToPixels({ 20.f, 0.f });
+    float2 Bar3 = this->ToPixels({ 21.f, 13.f });
+    float2 Bar4 = this->ToPixels({ 21.f, 0.f });
+    float2 Basket1 = this->ToPixels({ 15.f, 10.f });
+    float2 Basket2 = this->ToPixels({ 20.f, 10.f });
+    float2 Basket3 = this->ToPixels({ 16.f, 7.f });
+    float2 Basket4 = this->ToPixels({ 19.f, 7.f });
+
+    dl->AddLine(Basket1, Basket2, IM_COL32_WHITE, 4);
+    dl->AddLine(Basket3, Basket4, IM_COL32_WHITE, 4);
+    dl->AddLine({ Basket2.x - 10, Basket2.y}, Basket4, IM_COL32_WHITE, 4);
+    dl->AddLine(Basket3, { Basket1.x + 10, Basket1.y }, IM_COL32_WHITE, 4);
+    dl->AddLine(Bar1, Bar2, IM_COL32_WHITE, 4);
+    dl->AddLine(Bar3, Bar4, IM_COL32_WHITE, 4);
+    dl->AddLine(Bar1, Bar3, IM_COL32_WHITE, 4);
 }
 
 void CannonRenderer::DrawCannon(const CannonState& cannon)
@@ -151,6 +179,8 @@ CannonGame::~CannonGame()
 
 }
 
+
+
 void CannonGame::UpdateAndDraw()
 {
     LineOpacity += Time::GetDeltaTime() * 20 * opacity;
@@ -207,6 +237,11 @@ void CannonGame::UpdateAndDraw()
             it++;
         }
     }
+
+    std::string score = {"Score = " + std::to_string(scoreBasket)};
+
+    renderer.dl->AddText(renderer.ToPixels({ 20, 20 }), IM_COL32_WHITE, score.c_str());
+
 
     if (ImGui::Begin("Canon state", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
     {
@@ -265,12 +300,12 @@ void CannonGame::UpdateAndDraw()
 
     // Draw cannon
     renderer.DrawGround();
+    renderer.DrawBasket();
     renderer.DrawCannon(cannonState);
     renderer.DrawProjectileMotion(cannonState);
     for (auto it = projectiles.begin(); it != projectiles.end(); )
     {
-
-        (*it)->Update(renderer);
+        (*it)->Update(renderer, scoreBasket);
         if ((*it)->timeAlive > 2)
         {
             it = projectiles.erase(it);

@@ -45,6 +45,8 @@ public:
 
 	//Bounce Variables
 	bool bounce = false;
+	bool hasBounce = false;
+	bool scoreOnce = false;
 	bool firstBounce = false;
 	bool isOut = false;
 	int bounceDelay = 0;
@@ -57,7 +59,7 @@ public:
 	Projectile() {};
 	~Projectile() {};
 
-	virtual void Update(CannonRenderer& renderer) {};
+	virtual void Update(CannonRenderer& renderer, int& score) {};
 	virtual void DrawCurve(CannonRenderer& renderer) {};
 	virtual void Init() {};
 
@@ -72,7 +74,7 @@ public:
 	 Sphere(float radius, float initialS, float ang, float2 initialPos);
 	 ~Sphere() {};
 
-	 void Update(CannonRenderer& renderer) override;
+	 void Update(CannonRenderer& renderer, int& score) override;
 	 void DrawCurve(CannonRenderer& renderer) override;
 	 void Init() override;
  };

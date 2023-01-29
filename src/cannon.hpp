@@ -71,7 +71,9 @@ public:
     float2 ToWorld(float2 coordinatesInPixels);
 
     // Draw functions
+    bool circleCircleCollision(float x1, float y1, float r1, float x2, float y2, float r2);
     void DrawGround();
+    void DrawBasket();
     void ToShoot();
     void DrawCannon(const CannonState& cannon);
     void DrawProjectileMotion(const CannonState& cannon);
@@ -95,6 +97,7 @@ private:
     float LineDelay;
     float LineOpacity;
     int opacity;
+    int scoreBasket = 0;
 
     Time time;
     CannonRenderer& renderer;

@@ -12,7 +12,7 @@ Sphere::Sphere(float radius, float initialS, float ang, float2 initialPos)
 	angle = ang;
 }
 
-void Sphere::Update(CannonRenderer& renderer)
+void Sphere::Update(CannonRenderer& renderer, int& score)
 {
 	time += Time::GetDeltaTime();
 	timeAlive += Time::GetDeltaTime();
@@ -48,6 +48,7 @@ void Sphere::Update(CannonRenderer& renderer)
 		if (pos.y-radius < 0   && !bounce)
 		{
 			bounce = true;
+			hasBounce = true;
 			time = 0;
 			speed.y *= -0.75f;
 
@@ -76,11 +77,16 @@ void Sphere::Update(CannonRenderer& renderer)
 		timeBeforeFirstBounce += Time::GetDeltaTime();
 		lengthBeforeFirstBounce = position.x - initialPosition.x;
 	}
+	if (renderer.circleCircleCollision(position.x, position.y, norme(cannon - cannon3) / 2, 17.5, 8.5, 1) && !hasBounce && !scoreOnce)
+	{
+		score++;
+		scoreOnce = true;
+	}
 
 	if (position.y > maxHeightReached)
 		maxHeightReached = position.y;
 
-	renderer.dl->AddCircle(renderer.ToPixels(position), norme(renderer.ToPixels(cannon) - renderer.ToPixels(cannon3)) / 2, IM_COL32_WHITE,0,4);
+	renderer.dl->AddCircle(renderer.ToPixels(position), norme(renderer.ToPixels(cannon) - renderer.ToPixels(cannon3)) / 2, IM_COL32_WHITE, 0, 4);
 
 	DrawCurve(renderer);
 }
