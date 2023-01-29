@@ -37,11 +37,17 @@ struct Target
 struct CannonState
 {
     float2 position;
+    float cannonSpeed = 0;
+
     float angle = 45; // In radians
     float width;
     float height;
     float initialSpeed = 25;
     float decelerationDuCanon;
+    float mass = 1;
+    float groundFrictionCoeff = 1;
+
+    void Update();
 };
 
 // Renderer class

@@ -182,8 +182,10 @@ void CannonGame::UpdateAndDraw()
     bottmLeft.Update(0.25);
     bottmRight.Update(0.25);
 
+    cannonState.Update();
     renderer.PreUpdate();
     time.Update();
+
 
     const char* items[] = { "Sphere", "Cube" };
     static int item_current = 0;
@@ -204,8 +206,6 @@ void CannonGame::UpdateAndDraw()
         {
             it++;
         }
-
-
     }
 
     if (ImGui::Begin("Canon state", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
@@ -225,6 +225,8 @@ void CannonGame::UpdateAndDraw()
             ImGui::SliderFloat("Angle", &cannonState.angle, 0.f, 90.f);
             ImGui::SliderFloat("Width", &cannonState.width, 0.f, 2.f);
             ImGui::SliderFloat("Height", &cannonState.height, 0.f, 4.f);
+            ImGui::SliderFloat("Mass", &cannonState.mass, 1.f, 40.f);
+            ImGui::SliderFloat("Ground Friction Coefficient", &cannonState.groundFrictionCoeff, 0.f, 10.f);
             ImGui::Unindent(10);
         }
         if (ImGui::CollapsingHeader("Cannon Projectile Data", ImGuiTreeNodeFlags_DefaultOpen))
@@ -251,6 +253,9 @@ void CannonGame::UpdateAndDraw()
                     projectiles.back()->canonInitalSpeed = cannonState.initialSpeed;
                     projectiles.back()->mass = sphereDisplay.mass;
                     projectiles.back()->Init();
+
+                    cannonState.cannonSpeed -= projectiles.back()->mass * cannonState.initialSpeed * cos(degToRad(cannonState.angle)) / cannonState.mass;
+                    printf("cannon speed = %f \n", cannonState.cannonSpeed);
                 }
             }
             ImGui::Unindent(10);
@@ -289,5 +294,24 @@ void colorGrad::Update(float step)
     {
         lerpColor += step * Time::GetDeltaTime();
         colorTemp = lerp(current, next, lerpColor);
+    }
+}
+
+void CannonState::Update()
+{
+    if (cannonSpeed < 0 && position.x >= -25.f)
+    {
+        cannonSpeed += groundFrictionCoeff * mass * GRAVITY * Time::GetDeltaTime();
+
+        if (cannonSpeed > -0.001f)
+            cannonSpeed = 0;
+
+        position.x += cannonSpeed * Time::GetDeltaTime();
+    }
+
+    if (position.x <= -25.f)
+    {
+        position.x = -25.f;
+        cannonSpeed = 0.f;
     }
 }

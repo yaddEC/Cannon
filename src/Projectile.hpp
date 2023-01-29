@@ -23,6 +23,9 @@ public:
 	float angle;
 	float time = 0;
 	float timeAlive = 0;
+	float timeBeforeFirstBounce = 0;
+	float lengthBeforeFirstBounce = 0;
+	float maxHeightReached = 0;
 
 	float2 direction;
 	float2 position;
@@ -42,6 +45,7 @@ public:
 
 	//Bounce Variables
 	bool bounce = false;
+	bool firstBounce = false;
 	bool isOut = false;
 	int bounceDelay = 0;
 
