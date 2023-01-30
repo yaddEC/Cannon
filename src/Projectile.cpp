@@ -129,8 +129,8 @@ void Sphere::DrawCurve(CannonRenderer& renderer)
 	float maxHeight = -voy / (2 * GRAVITY) + pow(voy, 2) / GRAVITY + yo;
 
 	float2 pos1;
-	pos1.x = xo - 1;
-	pos1.y = yo + 3;
+	pos1.x = -23;
+	pos1.y = -5;
 	std::string titles[8] = { 
 		"Maximum height = " + std::to_string(maxHeight), 
 		"Travel length = " + std::to_string(totalLength),

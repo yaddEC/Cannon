@@ -245,7 +245,7 @@ void CannonGame::UpdateAndDraw()
 
     if (ImGui::Begin("Canon state", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
     {
-        ImGui::Combo("combo", &item_current, items, IM_ARRAYSIZE(items));
+        
         // TODO: Add UI to edit other cannon state variables here
         if (ImGui::CollapsingHeader("Position", ImGuiTreeNodeFlags_DefaultOpen))
         {
@@ -269,31 +269,31 @@ void CannonGame::UpdateAndDraw()
             ImGui::Indent(10);
             ImGui::SliderFloat("Initial Speed", &cannonState.initialSpeed, 0.f, 200.f);
             ImGui::SliderFloat("Deceleration du au Canon", &cannonState.decelerationDuCanon, -200.f, 0.f);
-            if (item_current == 0)
-            {
-                ImGui::SliderFloat("mass", &sphereDisplay.mass, 1, 15.f);
-                const char* frictions[] = { "Linear","Quadratic","None" };
-                static int friction_current = 0;
-                ImGui::Combo("Friction", &friction_current, frictions, IM_ARRAYSIZE(frictions));
 
-                if (ImGui::Button("SHOOT!!!!!", ImVec2(100, 50)))
-                {
-                    projectiles.push_back(new Sphere(cannonState.width, cannonState.initialSpeed, cannonState.angle, cannonState.position));
-
-                    projectiles.back()->canonHeight = cannonState.height;
-                    projectiles.back()->canonWidth = cannonState.width;
-                    projectiles.back()->frictionState = static_cast<ProjectileFriction>(friction_current);
-                    projectiles.back()->canonAngle = cannonState.angle;
-                    projectiles.back()->canonDeceleration = cannonState.decelerationDuCanon;
-                    projectiles.back()->canonInitalSpeed = cannonState.initialSpeed;
-                    projectiles.back()->mass = sphereDisplay.mass;
-                    projectiles.back()->Init();
-
-                    cannonState.cannonSpeed -= projectiles.back()->mass * cannonState.initialSpeed * cos(degToRad(cannonState.angle)) / cannonState.mass;
-                    printf("cannon speed = %f \n", cannonState.cannonSpeed);
-                }
-            }
+            ImGui::SliderFloat("mass", &sphereDisplay.mass, 1, 15.f);
+            const char* frictions[] = { "Linear","Quadratic","None" };
+            static int friction_current = 0;
+            ImGui::Combo("Friction", &friction_current, frictions, IM_ARRAYSIZE(frictions));
             ImGui::Unindent(10);
+
+            ImGui::Indent(150);
+            if (ImGui::Button("SHOOT!!!!!", ImVec2(100, 50)))
+            {
+                projectiles.push_back(new Sphere(cannonState.width, cannonState.initialSpeed, cannonState.angle, cannonState.position));
+
+                projectiles.back()->canonHeight = cannonState.height;
+                projectiles.back()->canonWidth = cannonState.width;
+                projectiles.back()->frictionState = static_cast<ProjectileFriction>(friction_current);
+                projectiles.back()->canonAngle = cannonState.angle;
+                projectiles.back()->canonDeceleration = cannonState.decelerationDuCanon;
+                projectiles.back()->canonInitalSpeed = cannonState.initialSpeed;
+                projectiles.back()->mass = sphereDisplay.mass;
+                projectiles.back()->Init();
+
+                cannonState.cannonSpeed -= projectiles.back()->mass * cannonState.initialSpeed * cos(degToRad(cannonState.angle)) / cannonState.mass;
+                printf("cannon speed = %f \n", cannonState.cannonSpeed);
+            }
+            ImGui::Unindent(150);
         }
     }
     ImGui::End();
